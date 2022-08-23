@@ -88,6 +88,7 @@ public interface ConfigEntryBuilder {
     TextFieldBuilder startTextField(Component fieldNameKey, String value);
     
     TextDescriptionBuilder startTextDescription(Component value);
+    ButtonBuilder startButtonBuilder(Component value);
     
     <T extends Enum<?>> EnumSelectorBuilder<T> startEnumSelector(Component fieldNameKey, Class<T> clazz, T value);
     

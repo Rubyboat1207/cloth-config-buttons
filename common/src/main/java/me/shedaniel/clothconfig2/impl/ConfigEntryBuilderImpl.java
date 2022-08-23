@@ -129,6 +129,11 @@ public class ConfigEntryBuilderImpl implements ConfigEntryBuilder {
     }
     
     @Override
+    public ButtonBuilder startButtonBuilder(Component value) {
+        return new ButtonBuilder(new TextComponent(UUID.randomUUID().toString()), value);
+    }
+    
+    @Override
     public <T extends Enum<?>> EnumSelectorBuilder<T> startEnumSelector(Component fieldNameKey, Class<T> clazz, T value) {
         return new EnumSelectorBuilder<>(resetButtonKey, fieldNameKey, clazz, value);
     }

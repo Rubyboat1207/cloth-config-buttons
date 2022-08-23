@@ -23,6 +23,7 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.InputConstants;
 import me.shedaniel.autoconfig.util.Utils;
 import me.shedaniel.clothconfig2.api.*;
+import me.shedaniel.clothconfig2.gui.entries.ButtonEntry;
 import me.shedaniel.clothconfig2.gui.entries.MultiElementListEntry;
 import me.shedaniel.clothconfig2.gui.entries.NestedListListEntry;
 import me.shedaniel.clothconfig2.impl.builders.DropdownMenuBuilder;
@@ -30,6 +31,7 @@ import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.HoverEvent;
@@ -163,6 +165,9 @@ public class ClothConfigDemo {
                         new TranslatableComponent("text.cloth-config.testing.3").withStyle(s -> s.withColor(ChatFormatting.GREEN).withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, Utils.getConfigFolder().getParent().resolve("options.txt").toString())))
                 )
         ).build());
+        testing.addEntry(entryBuilder.startButtonBuilder(new TextComponent("My Amazing Awesome Button!")).setOnPress(button -> {
+            button.setAlpha(0.5f);
+        }).build());
         builder.transparentBackground();
         return builder;
     }
