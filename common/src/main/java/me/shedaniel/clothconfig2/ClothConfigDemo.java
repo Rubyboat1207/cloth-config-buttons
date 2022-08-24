@@ -167,7 +167,7 @@ public class ClothConfigDemo {
         ).build());
         testing.addEntry(entryBuilder.startButtonBuilder(new TextComponent("My Amazing Awesome Button!")).setOnPress(button -> {
             button.setAlpha(0.5f);
-        }).build());
+        }).setWidthBuffer(1000).build());
         builder.transparentBackground();
         return builder;
     }

@@ -49,43 +49,36 @@ import java.util.function.Supplier;
 public class ButtonEntry extends TooltipListEntry<Object> {
     public static final int LINE_HEIGHT = 12;
     private final Font textRenderer = Minecraft.getInstance().font;
-    private final int color;
     Component buttonInnerText;
     private int savedWidth = -1;
     private int savedX = -1;
     private int savedY = -1;
     
+    public int xbuffer;
+    public int ybuffer;
+    
     private final List<AbstractWidget> widgets;
     private Button button;
     private List<FormattedCharSequence> wrappedLines;
-    
     @ApiStatus.Internal
     @Deprecated
-    public ButtonEntry(Component fieldName, Component text, Button.OnPress onPress) {
-        this(fieldName, text, -1, onPress);
+    public ButtonEntry(Component fieldName, Component text, Button.OnPress onPress, int xbuffer) {
+        this(fieldName, text, null, onPress, xbuffer);
     }
     
     @ApiStatus.Internal
     @Deprecated
-    public ButtonEntry(Component fieldName, Component text, int color, Button.OnPress onPress) {
-        this(fieldName, text, color, null, onPress);
-    }
-    
-    @ApiStatus.Internal
-    @Deprecated
-    public ButtonEntry(Component fieldName, Component text, int color, Supplier<Optional<Component[]>> tooltipSupplier, Button.OnPress onPress) {
+    public ButtonEntry(Component fieldName, Component text, Supplier<Optional<Component[]>> tooltipSupplier, Button.OnPress onPress, int xbuffer) {
         super(fieldName, tooltipSupplier);
         this.buttonInnerText = text;
-        this.color = color;
         this.wrappedLines = Collections.emptyList();
-        this.button = new Button(0, 0, Minecraft.getInstance().font.width(text) + 6, 20, text, onPress);
+        this.button = new Button(0, 0, Minecraft.getInstance().font.width(text) + 6 + xbuffer, 20, text, onPress);
         widgets = Lists.newArrayList(button);
     }
     
     @Override
     public void render(PoseStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean isHovered, float delta) {
         super.render(matrices, index, y, x, entryWidth, entryHeight, mouseX, mouseY, isHovered, delta);
-    
         if (this.savedWidth != entryWidth || this.savedX != x || this.savedY != y) {
             this.wrappedLines = this.textRenderer.split(this.buttonInnerText, entryWidth);
             this.savedWidth = entryWidth;
@@ -99,7 +92,6 @@ public class ButtonEntry extends TooltipListEntry<Object> {
         
         Style style = this.getTextAt(mouseX, mouseY);
         AbstractConfigScreen configScreen = this.getConfigScreen();
-        
         if (style != null && configScreen != null) {
             configScreen.renderComponentHoverEffect(matrices, style, mouseX, mouseY);
         }
@@ -110,19 +102,6 @@ public class ButtonEntry extends TooltipListEntry<Object> {
         if (savedWidth == -1) return LINE_HEIGHT;
         int lineCount = this.wrappedLines.size();
         return lineCount == 0 ? 0 : 15 + lineCount * LINE_HEIGHT;
-    }
-    
-    @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button == 0) {
-            Style style = this.getTextAt(mouseX, mouseY);
-            AbstractConfigScreen configScreen = this.getConfigScreen();
-            if (configScreen != null && configScreen.handleComponentClicked(style)) {
-                return true;
-            }
-        }
-        
-        return super.mouseClicked(mouseX, mouseY, button);
     }
     
     @Nullable
@@ -144,11 +123,6 @@ public class ButtonEntry extends TooltipListEntry<Object> {
     }
     
     @Override
-    public void save() {
-        
-    }
-    
-    @Override
     public Object getValue() {
         return null;
     }
@@ -156,6 +130,11 @@ public class ButtonEntry extends TooltipListEntry<Object> {
     @Override
     public Optional<Object> getDefaultValue() {
         return Optional.empty();
+    }
+    
+    @Override
+    public void save() {
+        
     }
     
     @Override

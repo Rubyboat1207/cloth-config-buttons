@@ -8,6 +8,7 @@ public class ButtonBuilder {
     Component value;
     Component id;
     Button.OnPress onPress;
+    int xbuffer = 0;
     
     public ButtonBuilder(Component component, Component value) {
         this.id = component;
@@ -19,7 +20,12 @@ public class ButtonBuilder {
         return this;
     }
     
+    public  ButtonBuilder setWidthBuffer(int xbuffer) {
+        this.xbuffer = xbuffer;
+        return this;
+    }
+    
     public ButtonEntry build() {
-        return new ButtonEntry(id, value, onPress);
+        return new ButtonEntry(id, value, onPress, xbuffer);
     }
 }
