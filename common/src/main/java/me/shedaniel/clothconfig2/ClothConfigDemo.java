@@ -33,10 +33,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
-import net.minecraft.network.chat.ClickEvent;
-import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -167,7 +164,9 @@ public class ClothConfigDemo {
         ).build());
         testing.addEntry(entryBuilder.startButtonBuilder(new TextComponent("My Amazing Awesome Button!")).setOnPress(button -> {
             button.setAlpha(0.5f);
-        }).setWidthBuffer(1000).build());
+        })
+            .setWidthBuffer(1000)
+        .build());
         builder.transparentBackground();
         return builder;
     }

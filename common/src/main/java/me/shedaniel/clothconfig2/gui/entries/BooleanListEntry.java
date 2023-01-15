@@ -38,11 +38,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 @Environment(EnvType.CLIENT)
 public class BooleanListEntry extends TooltipListEntry<Boolean> {
-    
+    interface ClickedCallback {
+        void onClicked(boolean newValue);
+    }
     private final AtomicBoolean bool;
     private final boolean original;
     private final Button buttonWidget;
@@ -65,12 +68,21 @@ public class BooleanListEntry extends TooltipListEntry<Boolean> {
     @ApiStatus.Internal
     @Deprecated
     public BooleanListEntry(Component fieldName, boolean bool, Component resetButtonKey, Supplier<Boolean> defaultValue, Consumer<Boolean> saveConsumer, Supplier<Optional<Component[]>> tooltipSupplier, boolean requiresRestart) {
+        this(fieldName, bool, resetButtonKey, defaultValue, saveConsumer, tooltipSupplier, requiresRestart, (ignored) -> {});
+    }
+    
+
+    
+    @ApiStatus.Internal
+    @Deprecated
+    public BooleanListEntry(Component fieldName, boolean bool, Component resetButtonKey, Supplier<Boolean> defaultValue, Consumer<Boolean> saveConsumer, Supplier<Optional<Component[]>> tooltipSupplier, boolean requiresRestart, ClickedCallback callback) {
         super(fieldName, tooltipSupplier, requiresRestart);
         this.defaultValue = defaultValue;
         this.original = bool;
         this.bool = new AtomicBoolean(bool);
         this.buttonWidget = new Button(0, 0, 150, 20, NarratorChatListener.NO_TITLE, widget -> {
             BooleanListEntry.this.bool.set(!BooleanListEntry.this.bool.get());
+            callback.onClicked(BooleanListEntry.this.bool.get());
         });
         this.resetButton = new Button(0, 0, Minecraft.getInstance().font.width(resetButtonKey) + 6, 20, resetButtonKey, widget -> {
             BooleanListEntry.this.bool.set(defaultValue.get());
